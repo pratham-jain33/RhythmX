@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RhythmX Piano Extractor</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/tone@14.8.49/build/Tone.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tonejs/midi@2.0.27/build/Midi.js" defer></script>
+</head>
+<body>
+    <main class="container">
+        <header>
+            <h1>RhythmX Piano Extractor</h1>
+            <p class="tagline">Turn any YouTube performance into piano-ready notation and MIDI.</p>
+        </header>
+
+        <form id="url-form" class="card">
+            <label for="url-input">YouTube Video URL</label>
+            <input id="url-input" type="url" name="url" placeholder="https://www.youtube.com/watch?v=..." required />
+            <button type="submit" id="submit-btn">Process Video</button>
+        </form>
+
+        <section id="progress" class="card hidden">
+            <h2>Processing</h2>
+            <p id="progress-label">Starting…</p>
+            <div class="progress-track">
+                <div id="progress-bar" class="progress-bar"></div>
+            </div>
+        </section>
+
+        <section id="status" class="status hidden"></section>
+
+        <section id="results" class="card hidden">
+            <h2>Downloads</h2>
+            <p id="expiry"></p>
+            <div class="links">
+                <a id="sheet-link" href="#" target="_blank" rel="noopener" download>Sheet Music (PDF)</a>
+                <a id="midi-link" href="#" target="_blank" rel="noopener" download>MIDI File (.mid)</a>
+            </div>
+        </section>
+
+        <section id="preview" class="card hidden">
+            <h2>Preview</h2>
+            <div class="preview-grid">
+                <div class="preview-pane">
+                    <h3>Sheet Music</h3>
+                    <iframe id="pdf-preview" title="Sheet music preview" sandbox="allow-same-origin allow-scripts" loading="lazy"></iframe>
+                </div>
+                <div class="preview-pane">
+                    <h3>MIDI Player</h3>
+                    <p id="midi-status">Load a MIDI file to preview.</p>
+                    <div class="midi-controls">
+                        <button id="play-midi" type="button" disabled>Play</button>
+                        <button id="stop-midi" type="button" disabled>Stop</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="/static/script.js" defer></script>
+</body>
+</html>
