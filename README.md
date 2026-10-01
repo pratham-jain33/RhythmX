@@ -42,11 +42,36 @@ us['lilypondPath'] = r'C:\\Program Files\\LilyPond\\usr\\bin\\lilypond.exe'
 
 ## Deployment Notes (Render)
 
-- Use the `backend` folder as the app root.
-- Set the start command to `gunicorn app:app`.
-- Configure a persistent build cache because downloading Demucs/Basic Pitch models can take time on each deploy.
-- Provision enough disk/time budget. Render's free tier allows 500 MB storage, so the app auto-cleans results after five minutes to stay within limits.
-- Install LilyPond during the build step to keep PDF rendering available (e.g., via an `apt` command in a `render-build.sh`).
+This repository includes ready-to-use Render config:
+
+- `/home/runner/work/RhythmX/RhythmX/render.yaml`
+- `/home/runner/work/RhythmX/RhythmX/backend/render-build.sh`
+
+### What the config does
+
+- Deploys only `/home/runner/work/RhythmX/RhythmX/backend` as the web service root.
+- Uses `gunicorn app:app` as the start command.
+- Installs Python dependencies from `requirements.txt`.
+- Installs system packages required by the pipeline: **FFmpeg** and **LilyPond**.
+- Sets cache environment variables (`PIP_CACHE_DIR`, `XDG_CACHE_HOME`, `TORCH_HOME`, `HF_HOME`, `BASIC_PITCH_CACHE_DIR`) so model and package downloads can be reused through Render's build cache.
+
+### Render setup checklist
+
+1. In Render, create a new **Blueprint** service from this repository (or apply `render.yaml` to an existing service).
+2. Confirm the service runtime is Python with `rootDir: backend`.
+3. Keep the default build command from the blueprint (`./render-build.sh`) and start command (`gunicorn app:app`).
+4. Use a plan with enough CPU and disk for Demucs + TensorFlow + model downloads (free tier is usually too constrained for reliable processing).
+5. Keep build cache enabled so subsequent deploys reuse model/package artifacts.
+
+### Live verification
+
+1. Open the deployed URL.
+2. Check health endpoint: `GET /health` returns `{"status":"ok"}`.
+3. Submit a valid YouTube URL in the web UI.
+4. Confirm successful output links for:
+   - `piano.mid`
+   - `sheet.pdf`
+5. Download both files and confirm they open correctly.
 
 ## Troubleshooting
 

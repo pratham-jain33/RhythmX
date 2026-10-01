@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: rhythmx
+    runtime: python
+    rootDir: backend
+    buildCommand: ./render-build.sh
+    startCommand: gunicorn app:app
+    plan: standard
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.14
+      - key: PIP_CACHE_DIR
+        value: /opt/render/project/.cache/pip
+      - key: XDG_CACHE_HOME
+        value: /opt/render/project/.cache
+      - key: TORCH_HOME
+        value: /opt/render/project/.cache/torch
+      - key: HF_HOME
+        value: /opt/render/project/.cache/huggingface
+      - key: BASIC_PITCH_CACHE_DIR
+        value: /opt/render/project/.cache/basic_pitch
